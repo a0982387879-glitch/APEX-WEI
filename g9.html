@@ -137,7 +137,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums }
 // ===== 老師設定：換成自己的名字；照片放 teacher.jpg；錄音放 audio/g8_01.mp3 這種檔名，並在 AUDIO 列出 =====
 const TEACHER = { name: "偉哥老師", photo: "teacher.jpg", card: "teacher_card.jpg" };
 // 這個網頁只放哪個年級的考卷（index_g9.html 由 make_g9.py 從這個檔產生，改這裡之後要重跑）
-const GRADE = "國三", SHOW = ["g9", "g9b", "g9c", "g9d", "g9e", "g9f", "g9g", "g9h", "g9i", "g9j", "g9k"];
+const GRADE = "國三", SHOW = ["g9", "g9b", "g9c", "g9d", "g9e", "g9f", "g9g", "g9h", "g9i", "g9j", "g9k", "g9l"];
 for (const k of Object.keys(QUIZ)) if (!SHOW.includes(k)) delete QUIZ[k];
 const AUDIO = [];   // 例如 ["g8_01", "g9_12"]，有錄音的題目才會出現「聽老師講」
 
