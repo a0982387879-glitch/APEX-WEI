@@ -133,6 +133,7 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums }
 </template>
 
 <script src="data.js"></script>
+<script src="audio_list.js"></script>
 <script>
 // ===== 老師設定：換成自己的名字；照片放 teacher.jpg；錄音放 audio/g8_01.mp3 這種檔名，並在 AUDIO 列出 =====
 const TEACHER = { name: "偉哥老師", photo: "teacher.jpg", card: "teacher_card.jpg" };
@@ -443,9 +444,18 @@ function speak(html) {
 }
 // 優先播放預先錄好的男聲 mp3（audio/g8_01_1.mp3＝國二第 1 題第 1 行）；載入失敗才改用裝置語音
 const player = new Audio();
+// iPhone Safari 只准在「手指點下去的當下」開口：先用一次空白念法解鎖，缺錄音的句子則直接念，不等載入失敗
+let unlocked = false;
+function unlockSpeech() {
+  if (unlocked || !("speechSynthesis" in window)) return; unlocked = true;
+  try { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; speechSynthesis.speak(u) } catch {}
+}
+["touchstart", "click"].forEach(ev => document.addEventListener(ev, unlockSpeech, { passive: true }));
 function playStep(src, fallbackHtml) {
   if (!VOICE.on) return;
   stopSpeak();
+  const have = window.AUDIO_HAVE;
+  if (have && !have.has(src.split("/").pop())) { speak(fallbackHtml); return; }
   const talk = on => { const t = document.getElementById("t"); t && t.classList.toggle("talking", on) };
   player.onplay = () => talk(true);
   player.onended = player.onpause = () => talk(false);
